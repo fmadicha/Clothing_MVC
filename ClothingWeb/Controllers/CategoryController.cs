@@ -1,0 +1,97 @@
+﻿using ClothingWeb.Data;
+using ClothingWeb.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ClothingWeb.Controllers
+{
+    public class CategoryController : Controller
+    {
+        private readonly AppDBContext _db;
+        public CategoryController(AppDBContext db)
+        {
+            _db = db;     
+        }
+        public IActionResult Index()
+        {
+            List<Category> objCategoryList= _db.Categories.ToList();
+            return View(objCategoryList);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Category obj)
+        {
+            if (obj.Name==obj.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("name", "The Display Order cannot exactly match the Name.");// server side validation
+            }
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Add(obj);
+                _db.SaveChanges();
+                TempData["success"] = "Category Created successfully";
+                return RedirectToAction("Index");// Redirects to Index action so  we see whats added
+            }
+            return View();
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if(id==null|| id==0)// not a valid id
+            {
+                return NotFound();
+            }//if valid 
+            
+            Category? categoryFromDb = _db.Categories.Find(id);
+            if(categoryFromDb==null)
+            {
+                return NotFound();
+            }
+            return View(categoryFromDb);
+        }
+        [HttpPost]
+        public IActionResult Edit(Category obj)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Update(obj);
+                _db.SaveChanges();
+                TempData["success"] = "Category Updated successfully";
+                return RedirectToAction("Index");// Redirects to Index action so  we see whats added
+            }
+            return View();
+        }
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)// not a valid id
+            {
+                return NotFound();
+            }//if valid 
+
+            Category? categoryFromDb = _db.Categories.Find(id);
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+            return View(categoryFromDb);
+        }
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePost(int? id)
+        {
+            Category? obj = _db.Categories.Find(id);
+            if(obj== null)
+            {
+                return NotFound();
+            }
+
+            _db.Categories.Remove(obj);//remove obj from db
+            _db.SaveChanges();
+            TempData["success"] = "Category Deletedted successfully";
+            return RedirectToAction("Index");
+        }
+
+    }
+}
