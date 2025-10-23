@@ -1,19 +1,25 @@
-﻿using ClothingWeb.Data;
-using ClothingWeb.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿
+using Clothing.DataAccess.Data;
+using Clothing.DataAccess.Repository;
 
-namespace ClothingWeb.Controllers
+using Clothing.DataAccess.Repository.IRepository;
+using Clothing.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Channels;
+
+namespace ClothingWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly AppDBContext _db;
-        public CategoryController(AppDBContext db)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _db = db;     
+            _unitOfWork = unitOfWork;     
         }
         public IActionResult Index()
         {
-            List<Category> objCategoryList= _db.Categories.ToList();
+            List<Category> objCategoryList= _unitOfWork.Category.GetAll().ToList();
             return View(objCategoryList);
         }
         public IActionResult Create()
@@ -29,8 +35,8 @@ namespace ClothingWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category Created successfully";
                 return RedirectToAction("Index");// Redirects to Index action so  we see whats added
             }
@@ -44,7 +50,8 @@ namespace ClothingWeb.Controllers
                 return NotFound();
             }//if valid 
             
-            Category? categoryFromDb = _db.Categories.Find(id);
+            //Category? categoryFromDb = _db.Categories.Find(id); now changing to
+            Category? categoryFromDb= _unitOfWork.Category.Get(u=>u.Id== id);
             if(categoryFromDb==null)
             {
                 return NotFound();
@@ -57,8 +64,8 @@ namespace ClothingWeb.Controllers
             
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category Updated successfully";
                 return RedirectToAction("Index");// Redirects to Index action so  we see whats added
             }
@@ -71,7 +78,7 @@ namespace ClothingWeb.Controllers
                 return NotFound();
             }//if valid 
 
-            Category? categoryFromDb = _db.Categories.Find(id);
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -81,14 +88,14 @@ namespace ClothingWeb.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
-            Category? obj = _db.Categories.Find(id);
-            if(obj== null)
+            Category? obj = _unitOfWork.Category.Get(u => u.Id == id);
+            if (obj== null)
             {
                 return NotFound();
             }
 
-            _db.Categories.Remove(obj);//remove obj from db
-            _db.SaveChanges();
+            _unitOfWork.Category.Remove(obj);//remove obj from db
+            _unitOfWork.Save();
             TempData["success"] = "Category Deletedted successfully";
             return RedirectToAction("Index");
         }

@@ -1,9 +1,10 @@
 using System.Diagnostics;
-using ClothingWeb.Models;
+using Clothing.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ClothingWeb.Controllers
+namespace ClothingWeb.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

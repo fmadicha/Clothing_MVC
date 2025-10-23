@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ClothingWeb.Models
+namespace Clothing.Models
 {
     public class Category
     {
@@ -10,7 +10,7 @@ namespace ClothingWeb.Models
         [Required]// string willhave a not null section coz of required.
         [MaxLength(30)]
         [DisplayName("Category Name")]
-        public string Name{ get; set; }
+        public string ?Name{ get; set; }
 
         [DisplayName("Display Order")]
         [Range(1,100)]

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.14.36310.24
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothingWeb", "ClothingWeb\ClothingWeb.csproj", "{789B3064-25CB-4F07-B329-920DB213A13C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A9E453F-1CA8-41AC-8227-8EE4E1AB8F46} = {6A9E453F-1CA8-41AC-8227-8EE4E1AB8F46}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clothing.DataAccess", "Clothing.DataAccess\Clothing.DataAccess.csproj", "{4FB56481-B9BE-48B1-8498-D0ED358448EC}"
 EndProject

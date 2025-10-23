@@ -1,7 +1,7 @@
-﻿using ClothingWeb.Models;
+﻿using Clothing.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClothingWeb.Data
+namespace Clothing.DataAccess.Data
 {
     public class AppDBContext : DbContext
     {
