@@ -5,15 +5,17 @@ namespace Clothing.Models
 {
     public class Category
     {
+        
         [Key]
-        public int Id{ get; set; }
-        [Required]// string willhave a not null section coz of required.
-        [MaxLength(30)]
+        public int Id { get; set; }
+        
         [DisplayName("Category Name")]
-        public string ?Name{ get; set; }
+        [Required, StringLength(100)]
+        public string? Name { get; set; }
 
-        [DisplayName("Display Order")]
-        [Range(1,100)]
-        public int DisplayOrder{ get; set; }
+        public string? Description { get; set; }
+
+        // Relationship: One category has many products
+        public List<Product> Products { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace ClothingWeb.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Category obj)
         {
-            if (obj.Name==obj.DisplayOrder.ToString())
+            if (obj.Name==obj.Description.ToString())
             {
                 ModelState.AddModelError("name", "The Display Order cannot exactly match the Name.");// server side validation
             }
@@ -96,7 +96,7 @@ namespace ClothingWeb.Areas.Admin.Controllers
 
             _unitOfWork.Category.Remove(obj);//remove obj from db
             _unitOfWork.Save();
-            TempData["success"] = "Category Deletedted successfully";
+            TempData["success"] = "Category Deleted successfully";
             return RedirectToAction("Index");
         }
 
